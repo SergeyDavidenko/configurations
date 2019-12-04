@@ -17,16 +17,21 @@ func GetConfigFrom(url string, login string, password string) (*ConfigData, erro
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, err
+		return Config, err
 	}
 	req.SetBasicAuth(login, password)
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return Config, err
+	}
+	if resp.StatusCode == 401 {
+		return nil, errors.New("Unauthorized")
+	} else if resp.StatusCode == 404 {
+		return Config, errors.New("Not found")
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err := json.Unmarshal(body, &Config); err != nil {
-		return nil, err
+		return Config, err
 	}
 	return Config, nil
 }
