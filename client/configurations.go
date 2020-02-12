@@ -107,7 +107,7 @@ func GetFloat32FromConfig(config *ConfigData, property string) (float32, error) 
 	return 0, errors.New("Error to get element")
 }
 
-// GetStringOrDefault ..
+// GetStringOrDefault get string or return default value (def)
 func GetStringOrDefault(property string, def string) string {
 	prop, err := GetStringFromConfig(Config, property)
 	if err != nil {
